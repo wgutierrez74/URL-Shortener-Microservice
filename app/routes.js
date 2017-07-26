@@ -41,21 +41,24 @@ module.exports = function(app){
               if(docs.length == 0){
                //Add long to db, create short, insert into db return short
                //res.send("connected2");
-              db.insert({"real-url": long, "short-url": })
-              short="Naww";
+              var addon = collection.count();
+              //db.insert({"real-url": long, "short-url": "https://wg-url-shortener.glitch.me/"+addon});
+              short="https://wg-url-shortener.glitch.me/"+addon;
+              
             }
             else{
               short = docs[0]["short-url"];
+              var json = {
+              "Original URL": long,
+              "Short URL": short
+              };
+            res.send(json);
+            db.close();
              
             }
             
             
-            var json = {
-              "Original URL": long,
-              "Short URL": short
-            };
-            res.send(json);
-            db.close();
+            
               
               
             });
