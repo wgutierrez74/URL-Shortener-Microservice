@@ -163,10 +163,10 @@ module.exports = function(app){
   
   
   app.route("/:num").get(function(req, res){
-    var num = req.params;
-    res.send(req.params);
+    var num = req.params.num;
+    //res.send(req.params);
     var loc = "https://wg-url-shortener.glitch.me/"+num;
-    res.send(loc);
+    //res.send(loc);
      MongoClient.connect(url, function (err, db) {
         if (err) {
           res.send("Error connecting");
@@ -179,8 +179,8 @@ module.exports = function(app){
               db.close();
             }
             else{
-              res.send(doc[0]["real-url"]);
-              //res.redirect(301, doc[0]['real-url']);
+              //res.send(doc[0]["real-url"]);
+              res.redirect(301, doc[0]['real-url']);
               db.close();
             }
           })
