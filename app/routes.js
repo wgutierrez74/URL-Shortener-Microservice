@@ -12,16 +12,16 @@ module.exports = function(app){
   
   
   
-  app.route("/:query").get(function(req, res){
+  app.route("/https://:query").get(function(req, res){
     
     //Validate URL; If good proceed
-    var long = process.env.APP_URL + req.;
-    res.send(long);
+    var long = "https://"+req.params.query;
+    //res.send(long);
    
     
     if(validUrl.isUri(long)){
       
-      var short = db.returnUrl(long);
+      var short = db(long).returnURL(long);
       
       var json = {
         "Original URL": long,
