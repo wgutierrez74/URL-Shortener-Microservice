@@ -1,4 +1,4 @@
-module.exports = function(){
+module.exports = function(long){
   
 
 
@@ -15,7 +15,7 @@ var url = 'mongodb://will:gutierrez@ds125623.mlab.com:25623/fcc-backend';
 //(Focus on This Variable)
 
 
-function returnURL(long){
+//function returnURL(long){
   // Use connect method to connect to the Server
   var short;
   MongoClient.connect(url, function (err, db) {
@@ -33,12 +33,12 @@ function returnURL(long){
     }
       
     db.close();
-    return short;
+    //return short;
   }
     //return short;
 });
   
   
   
-};
+//};
 }
