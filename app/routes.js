@@ -17,15 +17,15 @@ module.exports = function(app){
   
   
   
-  app.route("/https://:query").get(function(req, res){
+  app.route("/https://:url").get(function(req, res){
     
     //Validate URL; If good proceed
-    var long = "https://"+req.params.query;
+    var long = "https://"+req.params.url;
    
     
     if(validUrl.isUri(long)){
       
-      var short;
+      
       
       MongoClient.connect(url, function (err, db) {
         if (err) {
@@ -35,16 +35,17 @@ module.exports = function(app){
            //res.send("connected1");
             var collection = db.collection('short-urls');
             
-            var cursor = collection.find({"real-URL": long})
-            res.send(cursor.toArray(function(err, docs)));
-            if(cursor.toArray().length == 0){
+            var cursor = collection.find({"real-url": long})
+            cursor.toArray(function(err, docs){
+              var short;
+              if(docs.length == 0){
                //Add long to db, create short, insert into db return short
-               res.send("connected2");
+               //res.send("connected2");
               short="Naww";
             }
             else{
-              short = cursor.toArray()[0]["short-URL"];
-              res.send(short);
+              short = docs[0]["short-url"];
+             
             }
             
             
@@ -54,13 +55,15 @@ module.exports = function(app){
             };
             res.send(json);
             db.close();
+              
+              
+            });
       }
   
     });
       
       
-      
-      //res.send(json);
+  
       
     }
     else{
@@ -70,6 +73,9 @@ module.exports = function(app){
     }
     
   });
+  
+  
+  app.route("/:query")
   
   
 };
