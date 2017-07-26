@@ -163,16 +163,25 @@ module.exports = function(app){
   
   
   app.route("/:num").get(function(req, res){
-    var num = req.params.num;
+    var num = req.params;
+    res.send(req.params);
+    var loc = "https://wg-url-shortener.glitch.me/"+num;
+    res.send(loc);
      MongoClient.connect(url, function (err, db) {
         if (err) {
           res.send("Error connecting");
           console.log('Unable to connect to the mongoDB server. Error:', err);
         } else {
-          var collection = db.collection("short-url");
-          collection.find({"short-url": "https://wg-url-shortener.glitch.me/"+num}).toArray(function(err, doc){
+          var collection = db.collection("short-urls");
+          collection.find({"short-url": loc}).toArray(function(err, doc){
             if(doc.length==0){
-              res.send("Not a v")
+              res.send("Not a valid path");
+              db.close();
+            }
+            else{
+              res.send(doc[0]["real-url"]);
+              //res.redirect(301, doc[0]['real-url']);
+              db.close();
             }
           })
         }
