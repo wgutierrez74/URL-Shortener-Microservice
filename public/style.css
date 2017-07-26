@@ -4,8 +4,8 @@ body {
 	font-family: 'Roboto', sans-serif;
 	font-size: 16px;
 	color: #222;
-	background-color: #ECF0F1;
-	text-align: center;
+	background-color: white;
+	text-align: left;
 }
 
 .container {
@@ -23,6 +23,9 @@ ol {
 ul {
 	list-style-type: none;
 }
+li{
+  margin-bottom:2%;
+}
 
 a {
 	color: #2574A9;
@@ -32,4 +35,16 @@ a {
 img {
 	margin: 20px auto 0 auto;
 	display: block;
+}
+
+.well{
+  background-color:inherit;
+  border:none;
+  border-left: solid 6px #e3e3e3;
+  
+}
+
+.example-text p{
+  color:#c7254e;;
+  background-color:
 }
