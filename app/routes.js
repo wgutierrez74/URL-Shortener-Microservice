@@ -29,17 +29,22 @@ module.exports = function(app){
       
       MongoClient.connect(url, function (err, db) {
         if (err) {
+          res.send("Error connecting");
           console.log('Unable to connect to the mongoDB server. Error:', err);
         } else {
+           //res.send("connected1");
             var collection = db.collection('short-urls');
-    
+            
             var cursor = collection.find({"real-URL": long})
+            res.send(cursor.toArray(function(err, docs)));
             if(cursor.toArray().length == 0){
                //Add long to db, create short, insert into db return short
+               res.send("connected2");
               short="Naww";
             }
             else{
               short = cursor.toArray()[0]["short-URL"];
+              res.send(short);
             }
             
             
