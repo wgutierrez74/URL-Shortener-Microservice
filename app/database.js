@@ -19,13 +19,18 @@ function returnURL(long){
   } else {
     var collection = db.collection('short-urls');
     
-    collection.find({real-URL: long})
-    
-    
-
-    //Close connection
+    var cursor = collection.find({"real-URL": long})
+    if(cursor.toArray().length == 0){
+     //Add long to db, create short, insert into db return short
+    }
+    else{
+      short = cursor.toArray()[0]["short-URL"];
+    }
+      
     db.close();
+    return short;
   }
+    //return short;
 });
   
   
