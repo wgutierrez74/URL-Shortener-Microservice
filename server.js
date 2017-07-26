@@ -23,6 +23,7 @@ if (!process.env.DISABLE_XORIGIN) {
 }
 
 app.use('/public', express.static(process.cwd() + '/public'));
+app.use('/app', express.static(process.cwd() + '/app'))
 
 app.route('/_api/package.json')
   .get(function(req, res, next) {
