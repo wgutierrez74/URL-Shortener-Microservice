@@ -9,6 +9,12 @@ var MongoClient = mongodb.MongoClient;
 var url = 'mongodb://will:gutierrez@ds125623.mlab.com:25623/fcc-backend';      
 //(Focus on This Variable)
 
+
+function returnURL(long){
+  
+}
+
+
 // Use connect method to connect to the Server
   MongoClient.connect(url, function (err, db) {
   if (err) {

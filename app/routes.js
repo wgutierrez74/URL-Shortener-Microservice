@@ -1,4 +1,5 @@
-
+var validUrl = require("valid-url");
+var db = require("database.js");
 
 
 module.exports = function(app){
@@ -14,8 +15,24 @@ module.exports = function(app){
   app.route("/:url").get(function(req, res){
     
     //Validate URL; If good proceed
-    var query = req.params.query
-    if(validUrl)
+    var long = req.params.url
+    if(validUrl.isUri(long)){
+      
+      var short = db.returnUrl(long);
+      
+      var json = {
+        "Original URL": long,
+        "Short URL": short
+      };
+      
+      res.send(json);
+      
+    }
+    else{
+      
+      res.send("Not a valid url")
+      
+    }
     
     
   });
