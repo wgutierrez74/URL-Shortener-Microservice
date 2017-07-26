@@ -1,4 +1,4 @@
-var validUrl = require("valid-url");
+var validUrl = require('valid-url');
 var db = require("./database.js");
 
 
@@ -15,8 +15,10 @@ module.exports = function(app){
   app.route("/:query").get(function(req, res){
     
     //Validate URL; If good proceed
-    var long = req.params;
+    var long = process.env.APP_URL + req.;
     res.send(long);
+   
+    
     if(validUrl.isUri(long)){
       
       var short = db.returnUrl(long);
@@ -35,13 +37,13 @@ module.exports = function(app){
       
     }
     
-    
   });
   
   
-  
-  
-  
-  
-  
 };
+    
+  
+  
+  
+  
+  

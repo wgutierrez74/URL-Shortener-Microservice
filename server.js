@@ -8,7 +8,7 @@
 var fs = require('fs');
 var express = require('express');
 var app = express();
-var routes = require("./app/routes.js")
+var routes = require('./app/routes.js');
 
 if (!process.env.DISABLE_XORIGIN) {
   app.use(function(req, res, next) {
