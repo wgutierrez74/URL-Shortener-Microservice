@@ -41,9 +41,18 @@ module.exports = function(app){
               if(docs.length == 0){
                //Add long to db, create short, insert into db return short
                //res.send("connected2");
-              var addon = collection.count();
+              collection.count({}, function(err, count){
+                short="https://wg-url-shortener.glitch.me/"+(count+1);
+                collection.insert({"real-url": long, "short-url": short});
+                var json = {
+              "Original URL": long,
+              "Short URL": short
+              };
+            res.send(json);
+            db.close();
+              });
               //db.insert({"real-url": long, "short-url": "https://wg-url-shortener.glitch.me/"+addon});
-              short="https://wg-url-shortener.glitch.me/"+addon;
+              //short="https://wg-url-shortener.glitch.me/"+addon;
               
             }
             else{
@@ -79,7 +88,7 @@ module.exports = function(app){
   });
   
   
-  app.route("/:query")
+  app.route("/:num").get(func)
   
   
 };
