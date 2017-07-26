@@ -11,22 +11,23 @@ var url = 'mongodb://will:gutierrez@ds125623.mlab.com:25623/fcc-backend';
 
 
 function returnURL(long){
-  
-}
-
-
-// Use connect method to connect to the Server
+  // Use connect method to connect to the Server
+  var short;
   MongoClient.connect(url, function (err, db) {
   if (err) {
     console.log('Unable to connect to the mongoDB server. Error:', err);
   } else {
     var collection = db.collection('short-urls');
-    console.log(collection);
-    console.log('Connection established to', url);
-
-    // do some work here with the database.
+    
+    collection.find({real-URL: long})
+    
+    
 
     //Close connection
     db.close();
   }
 });
+  
+  
+  
+}
