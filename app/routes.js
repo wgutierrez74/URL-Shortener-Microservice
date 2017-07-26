@@ -41,6 +41,7 @@ module.exports = function(app){
               if(docs.length == 0){
                //Add long to db, create short, insert into db return short
                //res.send("connected2");
+              db.insert({"real-url": long, "short-url": })
               short="Naww";
             }
             else{
