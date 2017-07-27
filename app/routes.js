@@ -15,159 +15,12 @@ module.exports = function(app){
   });
   
   
-  
-  
-  app.route("/https://:url").get(function(req, res){
-    
-    //Validate URL; If good proceed
-    var long = "https://"+req.params.url;
-   
-    
-    if(validateURL(long)){
-      
-      
-      
-      MongoClient.connect(url, function (err, db) {
-        if (err) {
-          res.send("Error connecting");
-          console.log('Unable to connect to the mongoDB server. Error:', err);
-        } else {
-           //res.send("connected1");
-            var collection = db.collection('short-urls');
-            
-            var cursor = collection.find({"real-url": long})
-            cursor.toArray(function(err, docs){
-              var short;
-              if(docs.length == 0){
-               //Add long to db, create short, insert into db return short
-               //res.send("connected2");
-              collection.count({}, function(err, count){
-                short="https://wg-url-shortener.glitch.me/"+(count+1);
-                collection.insert({"real-url": long, "short-url": short});
-                var json = {
-              "Original URL": long,
-              "Short URL": short
-              };
-            res.send(json);
-            db.close();
-              });
-              //db.insert({"real-url": long, "short-url": "https://wg-url-shortener.glitch.me/"+addon});
-              //short="https://wg-url-shortener.glitch.me/"+addon;
-              
-            }
-            else{
-              short = docs[0]["short-url"];
-              var json = {
-              "Original URL": long,
-              "Short URL": short
-              };
-            res.send(json);
-            db.close();
-             
-            }
-            
-            
-            
-              
-              
-            });
-      }
-  
-    });
-      
-      
-  
-      
-    }
-    else{
-      
-      res.send("Not a valid url")
-      
-    }
-    
-  });
-  
-  
-  
-  app.route("/http://:url").get(function(req, res){
-    
-    //Validate URL; If good proceed
-    var long = "http://"+req.params.url;
-   
-    
-    if(validUrl.isUri(long)){
-      
-      
-      
-      MongoClient.connect(url, function (err, db) {
-        if (err) {
-          res.send("Error connecting");
-          console.log('Unable to connect to the mongoDB server. Error:', err);
-        } else {
-           //res.send("connected1");
-            var collection = db.collection('short-urls');
-            
-            var cursor = collection.find({"real-url": long})
-            cursor.toArray(function(err, docs){
-              var short;
-              if(docs.length == 0){
-               //Add long to db, create short, insert into db return short
-               //res.send("connected2");
-              collection.count({}, function(err, count){
-                short="https://wg-url-shortener.glitch.me/"+(count+1);
-                collection.insert({"real-url": long, "short-url": short});
-                var json = {
-              "Original URL": long,
-              "Short URL": short
-              };
-            res.send(json);
-            db.close();
-              });
-              //db.insert({"real-url": long, "short-url": "https://wg-url-shortener.glitch.me/"+addon});
-              //short="https://wg-url-shortener.glitch.me/"+addon;
-              
-            }
-            else{
-              short = docs[0]["short-url"];
-              var json = {
-              "Original URL": long,
-              "Short URL": short
-              };
-            res.send(json);
-            db.close();
-             
-            }
-            
-            
-            
-              
-              
-            });
-      }
-  
-    });
-      
-      
-  
-      
-    }
-    else{
-      
-      res.send("Not a valid url")
-      
-    }
-    
-  });
-  
-  
-  
-  
   app.route("/:num").get(function(req, res){
     var num = req.params.num;
-    //res.send(req.params);
+
     var loc = "https://wg-url-shortener.glitch.me/"+num;
-    //res.send(loc);
-     MongoClient.connect(url, function (err, db) {
+   
+    MongoClient.connect(url, function (err, db) {
         if (err) {
           res.send("Error connecting");
           console.log('Unable to connect to the mongoDB server. Error:', err);
@@ -179,16 +32,43 @@ module.exports = function(app){
               db.close();
             }
             else{
-              //res.send(doc[0]["real-url"]);
               res.redirect(301, doc[0]['real-url']);
               db.close();
             }
-          })
+          });
         }
        
      });
     
   });
+  
+  
+  app.route("/https://:url").get(function(req, res){
+    
+    //Validate URL; If good proceed
+    var long = "https://"+req.params.url;
+
+    if(validateURL(long)){
+        shorten(req, res, long);
+    }
+    else{
+      res.send({"ERROR":"Not a valid url"});
+    }
+  });
+  
+  app.route("/http://:url").get(function(req, res){
+    
+      //Validate URL; If good proceed
+      var long = "http://"+req.params.url;
+
+
+      if(validateURL(long)){
+          shorten(req, res, long);
+      }
+      else{
+        res.send({"ERROR":"Not a valid url"});
+      }
+   });
   
   
   function validateURL(url) {
@@ -199,11 +79,47 @@ module.exports = function(app){
   }
   
   
+  function shorten(req, res, long){
+    
+    MongoClient.connect(url, function (err, db) {
+        if (err) {
+          res.send("Error connecting");
+          console.log('Unable to connect to the mongoDB server. Error:', err);
+        } else {
+           //res.send("connected1");
+            var collection = db.collection('short-urls');
+            
+            var cursor = collection.find({"real-url": long})
+            cursor.toArray(function(err, docs){
+              var short;
+              if(docs.length == 0){
+               //Add long to db, create short, insert into db return short
+              collection.count({}, function(err, count){
+                short="https://wg-url-shortener.glitch.me/"+(count+1);
+                collection.insert({"real-url": long, "short-url": short});
+                var json = {
+                  "Original URL": long,
+                  "Short URL": short
+                };
+                res.send(json);
+                db.close();
+              });
+            }
+            else{
+              short = docs[0]["short-url"];
+              var json = {
+                "Original URL": long,
+                "Short URL": short
+              };
+              res.send(json);
+              db.close();
+             
+            }  
+          });
+      }
+    });
+    
+  };
   
 };
-    
-  
-  
-  
-  
   
