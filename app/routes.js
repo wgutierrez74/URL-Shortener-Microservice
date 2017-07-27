@@ -9,7 +9,6 @@ var url = 'mongodb://will:gutierrez@ds125623.mlab.com:25623/fcc-backend';
 
 module.exports = function(app){
   
-  
   app.route("/").get(function(req, res){
     res.sendFile(process.cwd() + '/views/index.html');
   });
@@ -86,26 +85,25 @@ module.exports = function(app){
           res.send("Error connecting");
           console.log('Unable to connect to the mongoDB server. Error:', err);
         } else {
-           //res.send("connected1");
             var collection = db.collection('short-urls');
-            
             var cursor = collection.find({"real-url": long})
+            
             cursor.toArray(function(err, docs){
               var short;
               if(docs.length == 0){
                //Add long to db, create short, insert into db return short
-              collection.count({}, function(err, count){
-                short="https://wg-url-shortener.glitch.me/"+(count+1);
-                collection.insert({"real-url": long, "short-url": short});
-                var json = {
-                  "Original URL": long,
-                  "Short URL": short
-                };
-                res.send(json);
-                db.close();
-              });
-            }
-            else{
+                collection.count({}, function(err, count){
+                  short="https://wg-url-shortener.glitch.me/"+(count+1);
+                  collection.insert({"real-url": long, "short-url": short});
+                  var json = {
+                    "Original URL": long,
+                    "Short URL": short
+                  };
+                  res.send(json);
+                  db.close();
+                });
+              }
+              else{
               short = docs[0]["short-url"];
               var json = {
                 "Original URL": long,
@@ -116,7 +114,7 @@ module.exports = function(app){
              
             }  
           });
-      }
+        }
     });
     
   };
