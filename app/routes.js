@@ -1,11 +1,6 @@
-var validUrl = require('valid-url');
-//var db = require("./database.js");
 var mongodb = require('mongodb');
-
-//We need to work with "MongoClient" interface in order to connect to a mongodb server.
 var MongoClient = mongodb.MongoClient;
 var url = 'mongodb://will:gutierrez@ds125623.mlab.com:25623/fcc-backend';
-
 
 module.exports = function(app){
   
